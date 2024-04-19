@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import swal from 'sweetalert2';
+import clienteAxios, { confiHeaders } from '../helper/ClientAxios';
 
 
 const RegisterPage = () => {
@@ -26,7 +27,21 @@ const RegisterPage = () => {
     text: "Algun campo esta vacio",
   });
   }else if(pass === rpass){
-    const enviarForm = await fetch("http://localhost:3001/api/users", {
+    const enviarForm = await clienteAxios.post(`/users`,
+    {
+      nombreUsuario: user,
+      emailUsuario: email,
+      contrasenia: pass,
+    }, confiHeaders);
+
+    if(enviarForm.status === 201){
+      Swal.fire({
+        title: "Registro exitoso!",
+        icon: "success"
+      });
+    }
+
+    /*const enviarForm = await fetch("http://localhost:3001/api/users", {
       method:"POST",
       headers:{
         "content-type" : "application/json"
@@ -45,8 +60,9 @@ const RegisterPage = () => {
       title: "Oops...",
       text: "Las contraseñias no coinciden",
     })
-  }
- };
+  }*/
+ }
+};
 
   return (
    <>
