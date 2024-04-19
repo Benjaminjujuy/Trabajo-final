@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import swal from 'sweetalert2';
 import clienteAxios, { confiHeaders } from '../helper/ClientAxios';
+import Swal from 'sweetalert2';
 
 
 const RegisterPage = () => {
@@ -18,50 +19,48 @@ const RegisterPage = () => {
  };
 
  const handleClick = async(ev) =>{
-  ev.preventDefault();
-  const { user, email, pass, rpass } = formValues
-  if(!user || !email || !pass || !rpass) {
-  swal.fire({
-    icon: "error",
-    title: "Oops...",
-    text: "Algun campo esta vacio",
-  });
-  }else if(pass === rpass){
-    const enviarForm = await clienteAxios.post(`/users`,
-    {
-      nombreUsuario: user,
-      emailUsuario: email,
-      contrasenia: pass,
-    }, confiHeaders);
-
-    if(enviarForm.status === 201){
-      Swal.fire({
-        title: "Registro exitoso!",
-        icon: "success"
-      });
-    }
-
-    /*const enviarForm = await fetch("http://localhost:3001/api/users", {
-      method:"POST",
-      headers:{
-        "content-type" : "application/json"
-      },
-      body: JSON.stringify({
-      nombreUsuario: user,
-      emailUsuario: email,
-      contrasenia: pass
-      })
-    })
-
-    const data = await enviarForm.json()
-  }else{
+  try {
+    ev.preventDefault();
+    const { user, email, pass, rpass } = formValues
+    if(!user || !email || !pass || !rpass) {
     swal.fire({
       icon: "error",
       title: "Oops...",
-      text: "Las contraseñias no coinciden",
-    })
-  }*/
- }
+      text: "Algun campo esta vacio",
+    });
+    }else if(pass === rpass){
+      const enviarForm = await clienteAxios.post(`/users`,
+      {
+        nombreUsuario: user,
+        emailUsuario: email,
+        contrasenia: pass,
+      }, confiHeaders);
+  
+      if(enviarForm.status === 201){
+        Swal.fire({
+          title: "Registro exitoso!",
+          icon: "success"
+        });
+      }
+      
+    }else{
+      swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Las contraseñias no coinciden",
+      });
+    }
+
+  }catch (error) {
+    if(error.response.status === 400){
+      swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `${error.response.data.msg}`,
+      });
+    }
+  }
+  
 };
 
   return (
