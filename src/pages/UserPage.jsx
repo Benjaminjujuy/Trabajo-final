@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { Col, Container, Row } from "react-bootstrap";
 import CardsC from "../components/CardsC";
+import clienteAxios from "../helper/ClientAxios";
 
 const UserPage = () => {
   const [products, setProducts] = useState([])
 
   const getProducts = async () => {
-    const getAllProducts = await fetch("http://localhost:3001/api/products");
-    const data = await getAllProducts.json();
-    setProducts(data.getAllProducts);
+  const allProducts = await clienteAxios.get(`/products`)
+  setProducts(allProducts.data.getAllProducts);
   };
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 
 const LoginPage = () => {
     const [ formValues, setFormValues ] = useState({
@@ -14,30 +15,23 @@ const handleChange = (ev) => {
 
 const handleClick = async(ev) => {
     ev.preventDefault();
-    const sendFormLogin = await fetch("http://localhost3001/api/users/login",{
-        method: "POST",
-        headers:{
-            "content-type" : "application/json"
-        },
-        body: JSON.stringify({
-            nombreUsuario:formValues.user,
-            contrasenia:formValues.pass
-        })
-    })
+    const sendFormLogin = await clienteAxios.post("/users/login",{
+      nombreUsuario:formValues.user,
+      contrasenia:formValues.pass,
+    },
+     configHeaders
+  );
 
-    const data = await sendFormLogin.json()
-
-    if (data.role === "user") {
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("role", data.token);
-        location.href = "/user";
-    }else {
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("role", data.token);
-        location.href = "/admin";
-    }
-
-}
+  if(sendFormLogin.data.rol === `admin`){
+    sessionStorage.setItem("token", sendFormLogin.token);
+    sessionStorage.setItem("role", sendFormLogin.token);
+    location.href = "/admin";
+  }else{
+    sessionStorage.setItem("token", sendFormLogin.token);
+    sessionStorage.setItem("role", sendFormLogin.token);
+    location.href = "/user";
+  }   
+};
   return (
     <>
  <div className='d-flex justify-content-center my-5'>
@@ -71,4 +65,4 @@ const handleClick = async(ev) => {
   )
 }
 
-export default LoginPage
+export default LoginPage;

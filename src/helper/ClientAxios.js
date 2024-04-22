@@ -4,7 +4,7 @@ const clienteAxios = axios.create({
     baseURL: `${import.meta.env.VITE_URL_BACK}/api`,
 });
 
-export const confiHeaders = {
+export const configHeaders = {
     "content-type" : "application/json"
 };
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import swal from 'sweetalert2';
-import clienteAxios, { confiHeaders } from '../helper/ClientAxios';
+import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 import Swal from 'sweetalert2';
 
 
@@ -34,7 +34,7 @@ const RegisterPage = () => {
         nombreUsuario: user,
         emailUsuario: email,
         contrasenia: pass,
-      }, confiHeaders);
+      }, configHeaders);
   
       if(enviarForm.status === 201){
         Swal.fire({

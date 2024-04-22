@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Swal from 'sweetalert2';
+import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 
 const AdminUsersPage = () => {
     const [ users, setUsers ] = useState([]);
@@ -17,9 +18,12 @@ const AdminUsersPage = () => {
     };
 
     const getAllUsers = async() =>{
-        const getUsers = await fetch("http://localhost:3001/api/users");
-        const data = await getUsers.json();
-        setUsers(data.getAllUsers);
+      try {
+        const getUsers = await clienteAxios.get(`/users`)
+        setUsers(getUsers.data.getAllUsers);   
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const handleChage = (ev) => {
@@ -27,55 +31,60 @@ const AdminUsersPage = () => {
     };
 
     const handleClick = async(ev) => {
-      ev.preventDefault()
-      const updateUser = await fetch(`http://localhost:3001/api/users/${userState._id}`, {
-        method: `PUT`,
-        headers: {
-          "content-type" : "application/json"
+      try {
+        ev.preventDefault()
+        const updateProd = await clienteAxios.put(`/users/${userState._id}`,{
+        nombreUsuario: userState.nombreUsuario,
+        emailUsuario: userState.emailUsuario,
+        role: userState.role,
         },
-        body:JSON.stringify({
-          nombreUsuario: userState.nombreUsuario,
-          emailUsuario: userState.emailUsuario,
-          role: userState.role,
-        })
-      });
+      configHeaders
+    );
 
-      const data = await updateUser.json();
-      if (data) {
-        handleClose();
-        Swal.fire({
-          title: "Usuario actualizado con exito",
-          icon: "success",
-        })
+        if(updateProd.status === 200){
+          handleClose();
+          Swal.fire({
+            title: "Usuario actualizado con exito",
+            icon: "success",
+          });
+        }
+         } catch (error) {
+         console.log(error);
       }
     };
 
     const deleteUser = async(idUser) => {
+    try {
+      Swal.fire({
+        title: "Estas seguro de eliminar este usuario?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, estoy seguro!"
+      }).then(async(result) => {
+        if (result.isConfirmed) {
+        const delUser =await clienteAxios.delete(`/users/${idUser}`,
+      configHeaders);
 
-      const confirmDeleteUser = confirm("Estas seguro de que deseas eliminar este usuario?")
-
-      if(confirmDeleteUser) {
-        const delUser = await fetch(`http://localhost:3001/api/users/${idUser}`,{
-          method: "DELETE",
-          headers: {
-            "content-type" : "application/json",
-          },
-        }
-      )
-        const data = await delUser.json()
-
-        if(data){
-          Swal.fire({
-            title: "Usuario eliminado con exito",
-            icon: "success",
-          });
-        }
+      if(delUser.status === 200){
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
       }
+     }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    
     };
 
     useEffect(() => {
         getAllUsers()
-    }, [users])
+    }, [])
 
   return (
     <>

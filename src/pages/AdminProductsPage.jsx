@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Swal from 'sweetalert2';
+import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 
 const AdminProductsPage = () => {
     const [products, setProducts] = useState([])
@@ -18,9 +19,13 @@ const AdminProductsPage = () => {
     };
 
     const getProducts = async () => {
-      const getAllProducts = await fetch("http://localhost:3001/api/products");
-      const data = await getAllProducts.json();
-      setProducts(data.getAllProducts);
+     try {
+      const getAllProducts = await clienteAxios.get(`/products`);
+      setProducts(getAllProducts.data.getAllProducts);
+     } catch (error) {
+      console.log(error);
+     }
+
     };
 
     const handleChange = (ev) => {
@@ -28,58 +33,57 @@ const AdminProductsPage = () => {
     };
 
     const handleClick = async (ev) => {
+     try {
       ev.preventDefault();
-      const updateProd = await fetch(`http://localhost:3001/api/products/${productState._id}`,{
-        method: "PUT",
-        headers: {
-          "content-type" : "application/json"
-        },
-        body:JSON.stringify({
+      const updateProd = await clienteAxios.put(`/products/${productState._id}`, {
           titulo: productState.titulo,
           precio: productState.precio,
           codigo: productState.codigo,
           imagen: productState.imagen,
-        }),
-      });
+      },
+       configHeaders
+      );
 
-      const data = await updateProd.json()
-
-      if(data){
+      if(updateProd.status === 200){
         handleClose();
         Swal.fire({
           title: "Producto actualizado con exito",
           icon: "success",
         }); 
       }
+     } catch (error) {
+      console.log(error);
+     }
     };
 
     const deleteProd = async (idProd) => {
-
-      const confirmDeleteProd = confirm("Estas seguro de que deseas eliminar este producto?")
-
-      if(confirmDeleteProd){
-        const delProd = await fetch(`http://localhost:3001/api/products/${idProd}`, {
-          method: "DELETE",
-          headers: {
-           "content-type" : "application/json"
-          },
-         }
-       );
-   
-       const data = await delProd.json()
-   
-       if(data) {
-         Swal.fire({
-           title: "Producto eliminado con exito",
-           icon: "success",
-         }); 
-       }
-      }
+     try {
+      Swal.fire({
+        title: "Estas seguro de eliminar este producto?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, estoy seguro!"
+      }).then(async(result) => {
+        if (result.isConfirmed) {
+          const delProd = await clienteAxios.delete(`/products/${idProd}`, configHeaders);
+          if(delProd.status === 200){
+            Swal.fire({
+              title: "Producto eliminado correctamente!",
+              icon: "success"
+            });
+          }        
+        }
+      });
+     } catch (error) {
+      console.log(error);
+     }
     };
   
     useEffect(() => {
       getProducts()
-    }, [products]);
+    }, []);
 
   return (
     <>

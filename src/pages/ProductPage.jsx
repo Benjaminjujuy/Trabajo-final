@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Row} from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Swal from 'sweetalert2';
+import clienteAxios from '../helper/ClientAxios';
 
 const ProductPage = () => {
     const params = useParams();
@@ -10,9 +11,8 @@ const ProductPage = () => {
     const token = sessionStorage.getItem("token");
 
     const getOneProduct = async() => {
-     const getOneProduct = await fetch(`http://localhost:3001/api/products/${params.id}`);
-     const data = await getOneProduct.json();
-     setProduct(data.getProduct)
+      const getOneProduct = await clienteAxios.get(`/products/${params.id}`);
+      setProduct(getOneProduct.data.getProduct)
     };
 
     const addProdCart = () => {
