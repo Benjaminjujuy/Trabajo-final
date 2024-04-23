@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -16,15 +16,25 @@ const AdminUsersPage = () => {
       const userFind = users.find((user) => user._id === idUser);
       setUserState(userFind);
     };
+/*revisar*/
+    const getAllUsers = useCallback(async () => {
+        try {
+          const getUsers = await clienteAxios.get(`/users`)
+          setUsers(getUsers.data.getAllUsers);   
+        }catch (error) {
+          console.log(error);
+        }
+      }, []);
+    
 
-    const getAllUsers = async() =>{
+    /*const getAllUsers = async() =>{
       try {
         const getUsers = await clienteAxios.get(`/users`)
         setUsers(getUsers.data.getAllUsers);   
       } catch (error) {
         console.log(error);
       }
-    };
+    };*/
 
     const handleChage = (ev) => {
       setUserState({...userState, [ev.target.name]: ev.target.value});

@@ -7,9 +7,10 @@ import Swal from 'sweetalert2';
 import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 
 const AdminProductsPage = () => {
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState([]);
     const [show, setShow] = useState(false);
     const [productState, setProductState] = useState({});
+    
 
     const handleClose = () => setShow(false);
     const handleShow = (idProd) => {
