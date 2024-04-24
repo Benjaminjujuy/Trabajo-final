@@ -19,8 +19,10 @@ const NavbarC = () => {
     titulo: "",
     precio: 0,
     codigo: "",
-    imagen: "",
   });
+
+  const [Imagen, setImagen] = useState({})
+
   const token = sessionStorage.getItem("token")|| "";
   const role = sessionStorage.getItem("role")|| "";
 
@@ -41,22 +43,30 @@ const NavbarC = () => {
       setNewProduct({...newProduct, [ev.target.name]: ev.target.value});
     };
 
+  const handleChangeImagen = (ev) => {
+      setImagen(ev.target.file[0]);
+    };
+
   const handleClick = async(ev) => {
     try {
       ev.preventDefault()
-      const { titulo, precio, codigo, imagen } = newProduct;
+      const { titulo, precio, codigo, } = newProduct;
 
-      if(!titulo || !precio || !codigo || !imagen ) {
+      if(!titulo || !precio || !codigo ) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "Algun campo esta vacio",
         });
       } else {
-        const data = new FormData()
-        data.append(`imagen`, newProduct.imagen)
+        const data = new FormData();
+        data.append(`titulo`, titulo)
+        data.append(`precio`, precio)
+        data.append(`codigo`, codigo)
+        data.append(`imagen`, imagen)
 
-        const createProd = await clienteAxios.post(`/products`, newProduct, configHeaders)
+
+        const createProd = await clienteAxios.post(`/products`, data, configHeaders)
 
         if(createProd.status === 201) {
           Swal.fire({
@@ -147,8 +157,7 @@ const NavbarC = () => {
            <Form.Label>Imagen</Form.Label>
            <Form.Control type="file"
             value={newProduct.imagen}
-            onChange={handleChange}
-            name='imagen'/>
+            onChange={handleChangeImagen}/>
            </Form.Group>
 
            <div className='d-flex justify-content-center'> 
@@ -191,6 +200,6 @@ const NavbarC = () => {
     </Container>
   </Navbar>
     </>
-  )}
+  )};
 
 export default NavbarC;
