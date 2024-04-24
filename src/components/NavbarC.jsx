@@ -8,6 +8,8 @@ import { NavLink } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import Swal from 'sweetalert2';
+import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 
 
 
@@ -19,12 +21,13 @@ const NavbarC = () => {
     codigo: "",
     imagen: "",
   });
+  const token = sessionStorage.getItem("token")|| "";
+  const role = sessionStorage.getItem("role")|| "";
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const token = sessionStorage.getItem("token")|| "";
-  const role = sessionStorage.getItem("role")|| "";
+
 
   const signOff = () => {
     sessionStorage.removeItem("token")
@@ -33,6 +36,39 @@ const NavbarC = () => {
     location.href="/"
     }, 1000);
   };
+
+  const handleChange = (ev) => {
+      setNewProduct({...newProduct, [ev.target.name]: ev.target.value});
+    };
+
+  const handleClick = async(ev) => {
+    try {
+      ev.preventDefault()
+      const { titulo, precio, codigo, imagen } = newProduct;
+
+      if(!titulo || !precio || !codigo || !imagen ) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Algun campo esta vacio",
+        });
+      } else {
+        const data = new FormData()
+        data.append(`imagen`, newProduct.imagen)
+
+        const createProd = await clienteAxios.post(`/products`, newProduct, configHeaders)
+
+        if(createProd.status === 201) {
+          Swal.fire({
+            title: "Producto creado con exito",
+            icon: "success"
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
     
   return (
     <>
@@ -82,29 +118,47 @@ const NavbarC = () => {
            <Form>
            <Form.Group className="mb-3" controlId="formBasicEmail">
            <Form.Label>Titulo</Form.Label>
-           <Form.Control type="text" placeholder="EJ: Titulo1" />
+           <Form.Control type="text"
+            placeholder="EJ: Titulo1"
+            value={newProduct.titulo}
+            onChange={handleChange}
+            name='titulo'/>
            </Form.Group>
 
            <Form.Group className="mb-3" controlId="formBasicEmail">
            <Form.Label>Precio</Form.Label>
-           <Form.Control type="number" placeholder="EJ: $1000" />
+           <Form.Control type="number"
+            placeholder="EJ: $1000" 
+            value={newProduct.precio}
+            onChange={handleChange}
+            name='precio'/>
            </Form.Group>
 
            <Form.Group className="mb-3" controlId="formBasicEmail">
            <Form.Label>Codigo</Form.Label>
-           <Form.Control type="text" placeholder="EJ: ghg4bg1d4ggf" />
+           <Form.Control type="text"
+            placeholder="EJ: ghg4bg1d4ggf"
+            value={newProduct.codigo}
+            onChange={handleChange}
+            name='codigo'/>
            </Form.Group>
 
            <Form.Group className="mb-3" controlId="formBasicEmail">
            <Form.Label>Imagen</Form.Label>
-           <Form.Control type="file" />
+           <Form.Control type="file"
+            value={newProduct.imagen}
+            onChange={handleChange}
+            name='imagen'/>
            </Form.Group>
 
            <div className='d-flex justify-content-center'> 
-           <Button variant="success" type="submit">
+           <Button variant="success"
+            type="submit" 
+            onClick={handleClick}>
               Enviar formulario
            </Button>
            </div>
+
            </Form>
            </Modal.Body>
            </Modal>
