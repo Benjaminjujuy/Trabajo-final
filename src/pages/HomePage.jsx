@@ -9,7 +9,7 @@ const HomePage = () => {
    const [products, setProducts] = useState([])
    
    const getProducts = async () => {
-    const allProducts = await clienteAxios.gate("/products");
+    const allProducts = await clienteAxios.get("/products");
     setProducts(allProducts.data.getAllProducts);
    };
 
