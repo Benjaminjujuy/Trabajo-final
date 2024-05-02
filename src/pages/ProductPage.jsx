@@ -15,40 +15,69 @@ const ProductPage = () => {
       setProduct(getOneProduct.data.getProduct)
     };
 
-    const addProdCart = () => {
+    const addProdCart = async() => {
+    try {
       if(!token){
         Swal.fire({
           icon: "error",
           title: "Para añadir este producto debes iniciar sesion",
           text: "Seras re dirigido a iniciar sesion",
-        })
-      
+        })  
       setTimeout(() => {
         location.href= "/login";
       }, 3000);
     }else{
-      Swal.fire({
-        title: "Producto añadido al carrito",
-        icon: "success"
-      })}
+      const usuario = await clienteAxios.get(`/users/${sessionStorage.getItem(`idUsuario`)}`)
+
+      if(usuario.status === 200){
+        const addProd = await clienteAxios.post(`/products/cart/
+        ${usuario.data.getUser._id}/${params.id}/${usuario.data.getUser.idCarrito}`);
+
+        if(addProd.status === 200){
+          Swal.fire({
+            title: "Producto añadido al carrito",
+            icon: "success"
+          })}
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
     };
 
-    const addProdFav = () => {
-      if(!token){
+    const addProdFav = async() => {
+      try {
+        if(!token){
+          Swal.fire({
+            icon: "error",
+            title: "Para añadir este producto debes iniciar sesion",
+            text: "Seras re dirigido a iniciar sesion",
+          })
+        
+        setTimeout(() => {
+          location.href= "/login";
+        }, 3000);
+      }else{
+        const usuario = await clienteAxios.get(`/users/${sessionStorage.getItem(`idUsuario`)}`)
+  
+        if(usuario.status === 200){
+          const addProd = await clienteAxios.post(`/products/fav/
+          ${usuario.data.getUser._id}/${params.id}/${usuario.data.getUser.idFavoritos}`);
+  
+          if(addProd.status === 200){
+            Swal.fire({
+              title: "Producto añadido a favoritos",
+              icon: "success"
+            })}
+          }
+  
         Swal.fire({
-          icon: "error",
-          title: "Para añadir este producto debes iniciar sesion",
-          text: "Seras re dirigido a iniciar sesion",
-        })
-      
-      setTimeout(() => {
-        location.href= "/login";
-      }, 3000);
-    }else{
-      Swal.fire({
-        title: "Producto añadido a favoritos",
-        icon: "success"
-      })}
+          title: "Producto añadido a favoritos",
+          icon: "success"
+        })}
+      } catch (error) {
+        console.log(error)
+      }
     };
 
     useEffect(() => {

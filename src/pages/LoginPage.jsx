@@ -23,12 +23,14 @@ const handleClick = async(ev) => {
   );
 
   if(sendFormLogin.data.rol === `admin`){
-    sessionStorage.setItem("token", sendFormLogin.token);
-    sessionStorage.setItem("role", sendFormLogin.token);
+    sessionStorage.setItem("token", sendFormLogin.data.token);
+    sessionStorage.setItem("role", sendFormLogin.data.token);
+    sessionStorage.setItem("idUsuario", sendFormLogin.data.idUsuario);
     location.href = "/admin";
   }else{
     sessionStorage.setItem("token", sendFormLogin.token);
     sessionStorage.setItem("role", sendFormLogin.token);
+    sessionStorage.setItem("idUsuario", sendFormLogin.data.idUsuario);
     location.href = "/user";
   }   
 };

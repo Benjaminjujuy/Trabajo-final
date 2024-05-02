@@ -108,8 +108,8 @@ const NavbarC = () => {
             <>
             <NavLink to="#link">Sobre Nosotros</NavLink>
             <NavLink to="#link" >Contacto</NavLink>
-            <NavLink to="#link" >Favoritos</NavLink>
-            <NavLink to="#link" >Carrito</NavLink>
+            <NavLink to="/fav" >Favoritos</NavLink>
+            <NavLink to="/cart" >Carrito</NavLink>
             </> )
         :
           token && role === "admin"? (
