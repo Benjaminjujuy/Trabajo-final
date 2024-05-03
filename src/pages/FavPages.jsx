@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import clienteAxios, { configHeaders } from '../helper/ClientAxios';
+import CardsC from '../components/CardsC';
 
 const FavPages = () => {
   const [ favoritos, setFavoritos ] = useState([])
@@ -23,16 +22,13 @@ useEffect(() => {
   return (
     <>
        {favoritos.map((fav) => (
-        <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={fav.imagen}/>
-        <Card.Body>
-          <Card.Title>{fav.titulo}</Card.Title>
-          <Card.Text>
-          {fav.precio}
-          </Card.Text>
-          <Button variant="danger">Eliminar</Button>
-        </Card.Body>
-      </Card>
+      <CardsC 
+      url={fav.imagen} 
+      titulo={fav.titulo} 
+      descripcion={fav.precio} 
+      idProduct={fav._id}
+      key={fav._id} 
+      idPage="FavPage"/>
        ))}
     </>
   );
