@@ -2,6 +2,7 @@ import { Container, Row, Nav, Col } from "react-bootstrap";
 import ImagenesC from "./ImagenesC";
 import "../css/FooterC.css";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 
 const FooterC = () => {
@@ -18,18 +19,17 @@ const FooterC = () => {
                  width={"150"}/>
                 </Col>
                 <Col>
-                <Nav.Link href="#home">Facebook</Nav.Link>
-                <Nav.Link href="#link">Instagram</Nav.Link>
-                <Nav.Link href="#link">Youtube</Nav.Link>
+                <NavLink to="#home" className={"nav-link"}>Facebook</NavLink>
+                <NavLink to="#home">Instagram</NavLink>
+                <NavLink to="#home">Youtube</NavLink>
                 </Col>
                 <Col>
-                <Nav.Link href="#home">Trabaja con nosotros</Nav.Link>
-                <Nav.Link href="#link">Terminos y condiciones
-                </Nav.Link>
-                <Nav.Link href="#link">Contacto</Nav.Link>
+                <NavLink to="#home">Trabaja con nosotros</NavLink>
+                <NavLink to="#link">Terminos y condiciones</NavLink>
+                <Navlink to="#link">Contacto</Navlink>
                 </Col>
                 <Col>
-                 <iframe src="" frameborder="0"></iframe>
+                 <iframe src="" /*frameborder="0"*/></iframe>
                 </Col>
             </Row>
         </Container>

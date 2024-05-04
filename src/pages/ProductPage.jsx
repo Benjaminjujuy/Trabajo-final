@@ -41,7 +41,12 @@ const ProductPage = () => {
         }
       }
     } catch (error) {
-      console.log(error)
+      if(error.response.status === 400){
+        swal.fire({
+          icon: "error",
+          title: error.response.data.msg,
+        });
+      }
     }
     };
 
@@ -70,13 +75,14 @@ const ProductPage = () => {
               icon: "success"
             })}
           }
-  
-        Swal.fire({
-          title: "Producto añadido a favoritos",
-          icon: "success"
-        })}
+        }
       } catch (error) {
-        console.log(error)
+        if(error.response.status === 400){
+          swal.fire({
+            icon: "error",
+            title: error.response.data.msg,
+          });
+        }
       }
     };
 

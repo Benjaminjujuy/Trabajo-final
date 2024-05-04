@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import "../css/NavbarC.css";
 import ImagenesC from './ImagenesC';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -14,6 +14,7 @@ import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 
 
 const NavbarC = () => {
+  const navigate = useNavigate()
   const [show, setShow] = useState(false);
   const [newProduct, setNewProduct] = useState({
     titulo: "",
@@ -31,11 +32,11 @@ const NavbarC = () => {
 
 
 
-  const signOff = () => {
+  const singOut = () => {
     sessionStorage.removeItem("token")
     sessionStorage.removeItem("role")
     setTimeout (() => {
-    location.href="/"
+    navigate(`/`)
     }, 1000);
   };
 
@@ -106,16 +107,21 @@ const NavbarC = () => {
          {
           token && role === "user"? (
             <>
-            <NavLink to="#link">Sobre Nosotros</NavLink>
-            <NavLink to="#link" >Contacto</NavLink>
-            <NavLink to="/fav" >Favoritos</NavLink>
-            <NavLink to="/cart" >Carrito</NavLink>
-            </> )
+            <NavLink to="#link"className={"nav-link"} >Sobre Nosotros</NavLink>
+            <NavLink to="#link"className={"nav-link"} >Contacto</NavLink>
+            <NavLink to="/fav"className={"nav-link"} >Favoritos</NavLink>
+            <NavLink to="/cart"className={"nav-link"} >Carrito</NavLink>
+            </> 
+            )
         :
           token && role === "admin"? (
             <>
-            <NavLink to="/admin-users" >Usuarios</NavLink>
-            <NavLink to="/admin-products" >Productos</NavLink>
+            <NavLink to="/admin-users" className={"nav-link"}>
+              Usuarios
+            </NavLink>
+            <NavLink to="/admin-products"className={"nav-link"}>
+              Productos
+            </NavLink>
             <Button variant="success" onClick={handleShow} className='clase-btn'>
               Crear producto 
             </Button>
@@ -184,7 +190,9 @@ const NavbarC = () => {
         </Nav>
         {token && role ? (
           <Nav className="ms-auto">
-          <NavLink to="#" onClick={signOff}>Cerrar Sesion</NavLink>
+          <NavLink to="#" onClick={singOut} className={"nav-link"}>
+            Cerrar Sesion
+            </NavLink>
         </Nav>
         ) : (
           <Nav className="ms-auto">
