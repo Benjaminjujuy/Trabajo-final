@@ -2,8 +2,10 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import clienteAxios, { configHeaders } from '../helper/ClientAxios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
     const [ formValues, setFormValues ] = useState({
         user:"",
         pass:"",
@@ -26,12 +28,12 @@ const handleClick = async(ev) => {
     sessionStorage.setItem("token", sendFormLogin.data.token);
     sessionStorage.setItem("role", sendFormLogin.data.token);
     sessionStorage.setItem("idUsuario", sendFormLogin.data.idUsuario);
-    location.href = "/admin";
+    navigate("/admin");
   }else{
     sessionStorage.setItem("token", sendFormLogin.token);
     sessionStorage.setItem("role", sendFormLogin.token);
     sessionStorage.setItem("idUsuario", sendFormLogin.data.idUsuario);
-    location.href = "/user";
+    navigate("/user");
   }   
 };
   return (

@@ -14,7 +14,7 @@ import clienteAxios, { configHeaders } from '../helper/ClientAxios';
 
 
 const NavbarC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [newProduct, setNewProduct] = useState({
     titulo: "",
@@ -35,6 +35,8 @@ const NavbarC = () => {
   const singOut = () => {
     sessionStorage.removeItem("token")
     sessionStorage.removeItem("role")
+    sessionStorage.removeItem("idUsuario");
+    
     setTimeout (() => {
     navigate(`/`)
     }, 1000);

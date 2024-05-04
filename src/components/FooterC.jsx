@@ -20,13 +20,13 @@ const FooterC = () => {
                 </Col>
                 <Col>
                 <NavLink to="#home" className={"nav-link"}>Facebook</NavLink>
-                <NavLink to="#home">Instagram</NavLink>
-                <NavLink to="#home">Youtube</NavLink>
+                <NavLink to="#home"className={"nav-link"}>Instagram</NavLink>
+                <NavLink to="#home"className={"nav-link"}>Youtube</NavLink>
                 </Col>
                 <Col>
-                <NavLink to="#home">Trabaja con nosotros</NavLink>
-                <NavLink to="#link">Terminos y condiciones</NavLink>
-                <Navlink to="#link">Contacto</Navlink>
+                <NavLink to="#home"className={"nav-link"}>Trabaja con nosotros</NavLink>
+                <NavLink to="#link"className={"nav-link"}>Terminos y condiciones</NavLink>
+                <NavLink to="#link"className={"nav-link"}>Contacto</NavLink>
                 </Col>
                 <Col>
                  <iframe src="" /*frameborder="0"*/></iframe>

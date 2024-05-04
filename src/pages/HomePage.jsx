@@ -10,11 +10,12 @@ const HomePage = () => {
    
    const getProducts = async () => {
     const allProducts = await clienteAxios.get("/products");
+
     setProducts(allProducts.data.getAllProducts);
    };
 
    useEffect(() => {
-     getProducts()
+     getProducts();
    }, []);
 
 
