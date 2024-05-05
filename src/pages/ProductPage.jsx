@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Row} from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from 'sweetalert2';
 import clienteAxios from '../helper/ClientAxios';
 
 const ProductPage = () => {
     const params = useParams();
+    const navigate = useNavigate()
     const [ product, setProduct ] = useState({});
 
     const token = sessionStorage.getItem("token");
@@ -24,14 +25,14 @@ const ProductPage = () => {
           text: "Seras re dirigido a iniciar sesion",
         })  
       setTimeout(() => {
-        location.href= "/login";
+        navigate("/login");
       }, 3000);
     }else{
       const usuario = await clienteAxios.get(`/users/${sessionStorage.getItem(`idUsuario`)}`)
 
       if(usuario.status === 200){
-        const addProd = await clienteAxios.post(`/products/cart/
-        ${usuario.data.getUser._id}/${params.id}/${usuario.data.getUser.idCarrito}`);
+        const addProd = await clienteAxios.post(
+          `/products/cart/${params.id}`); 
 
         if(addProd.status === 200){
           Swal.fire({
@@ -60,14 +61,14 @@ const ProductPage = () => {
           })
         
         setTimeout(() => {
-          location.href= "/login";
+          navigate("/login");
         }, 3000);
       }else{
         const usuario = await clienteAxios.get(`/users/${sessionStorage.getItem(`idUsuario`)}`)
   
         if(usuario.status === 200){
-          const addProd = await clienteAxios.post(`/products/fav/
-          ${usuario.data.getUser._id}/${params.id}/${usuario.data.getUser.idFavoritos}`);
+          const addProd = await clienteAxios.post(
+            `/products/fav/${params.id}`);
   
           if(addProd.status === 200){
             Swal.fire({
