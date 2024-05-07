@@ -24,8 +24,8 @@ const NavbarC = () => {
 
   const [Imagen, setImagen] = useState({})
 
-  const token = sessionStorage.getItem("token")|| "";
-  const role = sessionStorage.getItem("role")|| "";
+  const token = JSON.parse(sessionStorage.getItem("token")) || "";
+  const role = JSON.parse(sessionStorage.getItem("role")) || "";
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
